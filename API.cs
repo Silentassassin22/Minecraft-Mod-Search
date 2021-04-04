@@ -12,10 +12,9 @@ namespace ModList
 {
     class API
     {
-        HttpClient client = new HttpClient();
         WebClient client2 = new WebClient();
 
-        public List<Mod> SearchMods(string search) 
+        public List<Mod> SearchMods(string search, string version) 
         {
             List<Mod> mods = new List<Mod>();
             string content;
@@ -26,15 +25,21 @@ namespace ModList
             return content;*/
             try
             {
-                content = client2.DownloadString("https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter="+search);
+                content = client2.DownloadString("https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter="+search+"&gameVersion="+version);
             }
             catch (Exception)
             { 
                 throw;
             }
             dynamic json = JsonConvert.DeserializeObject(content);
-            foreach(var x in json)
+            for (int i = 0; i < json.Count; i++)
             {
+                if(i >= 100)
+                {
+                    System.Windows.Forms.MessageBox.Show("Cut off after 100 mods");
+                    break;
+                }
+                var x = json[i];
                 mods.Add(new Mod(Convert.ToString(x.name), Convert.ToString(x.attachments[0].url), Convert.ToString(x.summary), Convert.ToString(x.websiteUrl)));
             }
             System.Windows.Forms.MessageBox.Show("Total mods before returning: "+mods.Count);

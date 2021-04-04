@@ -26,28 +26,55 @@ namespace ModList
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Search: "+textBox2.Text);
-            List<Mod> content = API.SearchMods(textBox2.Text);
-            MessageBox.Show("Total Mods: "+ content.Count);
+            string version = "";
+            switch (groupBox1.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Name)
+            {
+                case "v164":
+                    version = "1.6.4";
+                    break;
+                case "v1710":
+                    version = "1.7.10";
+                    break;
+                case "v1122":
+                    version = "1.12.2";
+                    break;
+                case "v1165":
+                    version = "1.16.5";
+                    break;
+            }
+            //MessageBox.Show("Search: "+textBox2.Text);
+            //MessageBox.Show("Searching version: "+version);
+            List<Mod> content = API.SearchMods(textBox2.Text, version);
+            //MessageBox.Show("Total Mods: "+ content.Count);
             foreach(Mod x in content)
             {
                 Panel panel = new Panel();
                 panel.Size = new System.Drawing.Size(240, 295);
                 panel.BackColor = BackColor = SystemColors.HotTrack;
+                panel.BorderStyle = BorderStyle.Fixed3D;
                 panel.Click += (a, b) =>
                 {
                     System.Diagnostics.Process.Start(x.pagelink);
                 };
 
                 PictureBox picture = new PictureBox();
-                picture.ImageLocation = x.piclink;
-                picture.Size = new System.Drawing.Size(234, 160);
+                picture.ImageLocation = x.piclink; //234
+                picture.Size = new System.Drawing.Size(229, 160);
                 picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                picture.Location = new Point(3, 0);
+                picture.Location = new Point(3, 3);
+                //picture.BorderStyle = BorderStyle.Fixed3D;
                 picture.Click += (a, b) =>
                 {
                     System.Diagnostics.Process.Start(x.pagelink);
                 };
+
+                Label label = new Label();
+                label.Text = "";
+                label.BorderStyle = BorderStyle.Fixed3D;
+                label.AutoSize = false;
+                label.Location = new Point(0, picture.Bounds.Bottom + 20);
+                label.Height = 2;
+                label.Width = 240;
 
                 TextBox text = new TextBox();
                 text.Multiline = true;
@@ -58,7 +85,7 @@ namespace ModList
                 text.BackColor = SystemColors.HotTrack;
                 text.ForeColor = System.Drawing.Color.White;
                 text.BorderStyle = BorderStyle.None;
-                text.Text = x.title + Environment.NewLine + x.description + Environment.NewLine + x.pagelink + Environment.NewLine + x.piclink;
+                text.Text = x.title + Environment.NewLine + x.description;
 
                 text.Click += (a, b) =>
                 {
@@ -66,6 +93,7 @@ namespace ModList
                 };
 
                 panel.Controls.Add(picture);
+                panel.Controls.Add(label);
                 panel.Controls.Add(text);
 
                 flowLayoutPanel1.Controls.Add(panel);
@@ -202,6 +230,11 @@ namespace ModList
         private void StartNew()
         {
             System.Diagnostics.Process.Start("https://google.com");
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
