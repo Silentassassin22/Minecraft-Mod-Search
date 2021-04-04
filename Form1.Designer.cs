@@ -135,10 +135,10 @@
             this.v1165.Checked = true;
             this.v1165.Location = new System.Drawing.Point(184, 19);
             this.v1165.Name = "v1165";
-            this.v1165.Size = new System.Drawing.Size(55, 17);
+            this.v1165.Size = new System.Drawing.Size(54, 17);
             this.v1165.TabIndex = 3;
             this.v1165.TabStop = true;
-            this.v1165.Text = "1.16.5";
+            this.v1165.Text = "Latest";
             this.v1165.UseVisualStyleBackColor = true;
             // 
             // Form1

@@ -45,5 +45,23 @@ namespace ModList
             System.Windows.Forms.MessageBox.Show("Total mods before returning: "+mods.Count);
             return mods;
         }
+
+        public string GetLatestVersion()
+        {
+            string content;
+            try
+            {
+                content = client2.DownloadString("https://addons-ecs.forgesvc.net/api/v2/minecraft/version");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            dynamic json = JsonConvert.DeserializeObject(content);
+
+            System.Windows.Forms.MessageBox.Show("Latest version: " + json[0].versionString);
+
+            return json[0].versionString;
+        }
     }
 }
