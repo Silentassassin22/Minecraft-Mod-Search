@@ -12,7 +12,7 @@ namespace ModList
 {
     class API
     {
-        WebClient client2 = new WebClient();
+        WebClient client = new WebClient();
 
         public List<Mod> SearchMods(string search, string version) 
         {
@@ -25,7 +25,7 @@ namespace ModList
             return content;*/
             try
             {
-                content = client2.DownloadString("https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter="+search+"&gameVersion="+version);
+                content = client.DownloadString("https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter="+search+"&gameVersion="+version);
             }
             catch (Exception)
             { 
@@ -40,10 +40,43 @@ namespace ModList
                     break;
                 }
                 var x = json[i];
-                mods.Add(new Mod(Convert.ToString(x.name), Convert.ToString(x.attachments[0].url), Convert.ToString(x.summary), Convert.ToString(x.websiteUrl)));
+                mods.Add(new Mod(Convert.ToInt32(x.id), Convert.ToString(x.name), Convert.ToString(x.attachments[0].url), Convert.ToString(x.summary), Convert.ToString(x.websiteUrl)));
             }
             System.Windows.Forms.MessageBox.Show("Total mods before returning: "+mods.Count);
             return mods;
+        }
+
+        public string DownloadFile(int id, string path)
+        {
+            string content;
+            dynamic files = GetAddonFiles(id);
+            string link = files.downloadUrl;
+            string filename = files.fileName;
+            try
+            {
+                client.DownloadFile(link, filename);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return "";
+        }
+
+        public Object GetAddonFiles(int id)
+        {
+            string content;
+            try
+            {
+                content = client.DownloadString("https://addons-ecs.forgesvc.net/api/v2/addon/" + id + "/files");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            dynamic json = JsonConvert.DeserializeObject(content);
+            return json[0];
         }
 
         public string GetLatestVersion()
@@ -51,7 +84,7 @@ namespace ModList
             string content;
             try
             {
-                content = client2.DownloadString("https://addons-ecs.forgesvc.net/api/v2/minecraft/version");
+                content = client.DownloadString("https://addons-ecs.forgesvc.net/api/v2/minecraft/version");
             }
             catch (Exception)
             {

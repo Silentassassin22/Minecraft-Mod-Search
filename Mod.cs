@@ -8,13 +8,15 @@ namespace ModList
 {
     class Mod
     {
+        public int id { get; set; }
         public string title { get; set; }
         public string piclink { get; set; }
         public string description { get; set; }
         public string pagelink { get; set; }
 
-        public Mod(string Title, string Piclink, string Description, string Pagelink)
+        public Mod(int Id,  string Title, string Piclink, string Description, string Pagelink)
         {
+            id = Id;
             title = Title;
             piclink = Piclink;
             description = Description;

@@ -16,6 +16,10 @@ namespace ModList
     {
         API API = new API();
 
+        List<int> ids = new List<int>();
+
+        string path = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -48,13 +52,18 @@ namespace ModList
             //MessageBox.Show("Total Mods: "+ content.Count);
             foreach(Mod x in content)
             {
+                CheckBox checkbox = new CheckBox();
+
                 Panel panel = new Panel();
                 panel.Size = new System.Drawing.Size(240, 295);
                 panel.BackColor = BackColor = SystemColors.HotTrack;
                 panel.BorderStyle = BorderStyle.Fixed3D;
                 panel.Click += (a, b) =>
                 {
-                    System.Diagnostics.Process.Start(x.pagelink);
+                    if (path != "")
+                    {
+                        checkbox.Checked = !checkbox.Checked;
+                    }
                 };
 
                 PictureBox picture = new PictureBox();
@@ -65,7 +74,24 @@ namespace ModList
                 //picture.BorderStyle = BorderStyle.Fixed3D;
                 picture.Click += (a, b) =>
                 {
-                    System.Diagnostics.Process.Start(x.pagelink);
+                    if(path != "")
+                    {
+                        checkbox.Checked = !checkbox.Checked;
+                    }
+                };
+
+                
+                checkbox.Location = new Point(0, 0);
+                checkbox.Parent = picture;
+                checkbox.Size = new System.Drawing.Size(30, 30);
+                checkbox.BackColor = Color.Transparent;
+                checkbox.Text = "";
+                checkbox.CheckedChanged += (a, b) =>
+                {
+                    if(checkbox.Checked && !ids.Contains(x.id))
+                    {
+                        ids.Add(x.id);
+                    }
                 };
 
                 Label label = new Label();
@@ -89,9 +115,13 @@ namespace ModList
 
                 text.Click += (a, b) =>
                 {
-                    System.Diagnostics.Process.Start(x.pagelink);
+                    if (path != "")
+                    {
+                        checkbox.Checked = !checkbox.Checked;
+                    }
                 };
 
+                panel.Controls.Add(checkbox);
                 panel.Controls.Add(picture);
                 panel.Controls.Add(label);
                 panel.Controls.Add(text);
@@ -108,118 +138,23 @@ namespace ModList
             tableLayoutPanel1.Controls.Add(new Label() { Text = "Monkey", AutoSize = true }, 0, 0);*/
         }
 
+        private void downloadbutton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (downloadbutton.Checked)
+            {
+                FolderBrowserDialog folder = new FolderBrowserDialog();
+                DialogResult result = folder.ShowDialog();
+                path = folder.SelectedPath;
+
+            }
+        }
+
         private void Panel_Scroll(object sender, ScrollEventArgs e)
         {
             this.Invalidate();
 
             base.OnScroll(e);
         }
-
-        private void panel5_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel5_Paint_1(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel7_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel15_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel17_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel19_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel21_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel23_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel25_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel27_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel29_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel4_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel6_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel8_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel10_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel12_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel14_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel16_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel18_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Transform = new Matrix(1, 0, 0, 1, this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
@@ -235,6 +170,14 @@ namespace ModList
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void download_Click(object sender, EventArgs e)
+        {
+            foreach(var x in ids)
+            {
+                MessageBox.Show(API.DownloadFile(x, path));
+            }
         }
     }
 }
