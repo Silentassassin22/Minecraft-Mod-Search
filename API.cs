@@ -46,7 +46,7 @@ namespace ModList
             return mods;
         }
 
-        public string DownloadFile(int id, string path)
+        public void DownloadFile(int id, string path)
         {
             string content;
             dynamic files = GetAddonFiles(id);
@@ -54,14 +54,13 @@ namespace ModList
             string filename = files.fileName;
             try
             {
-                client.DownloadFile(link, filename);
+                client.DownloadFile(link, path + @"\" + filename);
+                //System.Windows.Forms.MessageBox.Show("Downloaded to: " + path + @"\" + filename);
             }
             catch (Exception)
             {
-
                 throw;
             }
-            return "";
         }
 
         public Object GetAddonFiles(int id)

@@ -30,6 +30,7 @@ namespace ModList
 
         private void button1_Click(object sender, EventArgs e)
         {
+            flowLayoutPanel1.Controls.Clear();
             string version = "";
             switch (groupBox1.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Name)
             {
@@ -80,7 +81,6 @@ namespace ModList
                     }
                 };
 
-                
                 checkbox.Location = new Point(0, 0);
                 checkbox.Parent = picture;
                 checkbox.Size = new System.Drawing.Size(30, 30);
@@ -176,7 +176,7 @@ namespace ModList
         {
             foreach(var x in ids)
             {
-                MessageBox.Show(API.DownloadFile(x, path));
+                API.DownloadFile(x, path);
             }
         }
     }
