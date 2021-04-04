@@ -38,8 +38,8 @@ namespace ModList
                 case "v1122":
                     version = "1.12.2";
                     break;
-                case "v1165":
-                    version = "1.16.5";
+                default:
+                    version = API.GetLatestVersion();
                     break;
             }
             //MessageBox.Show("Search: "+textBox2.Text);
